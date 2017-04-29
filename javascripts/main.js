@@ -15,6 +15,7 @@ $(document).ready(function(){
 //call things in crud: get todo
 	FbApi.getTodos().then(() => {
 		FbApi.writeDom();
+		countTask();
 		})
 	.catch((error) => {
 		console.log("getTodos Error", error);
@@ -32,6 +33,7 @@ $(document).ready(function(){
 			$('.list-container').removeClass('hide');
 			$('.new-container').addClass('hide');
 			FbApi.writeDom();
+			countTask();
 		 }).catch((error) => {
 		 	console.log("addTodo error", error);
 		});
@@ -51,6 +53,14 @@ $(document).ready(function(){
 
 
 
+
+
+
+
+let countTask = () => {
+	let remainingTasks = $('#incomplete-tasks li').length;
+	$('#counter').hide().fadeIn(3000).html(remainingTasks);
+};
 
 
 
