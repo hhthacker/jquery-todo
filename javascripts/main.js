@@ -41,14 +41,18 @@ $(document).ready(function(){
 
 	//delete todo
 	//edit todo
+
+
+
 	//complete todos
-
-
-
-
-
-
-
+	$('.main-container').on("click", 'input[type="checkbox"]', (event) => {
+		FbApi.checker(event.target.id).then(() => {
+			FbApi.writeDom();
+			countTask();
+		}).catch((error) => {
+			console.log("checker error", error);
+		});
+	});
 
 
 
@@ -59,7 +63,7 @@ $(document).ready(function(){
 
 let countTask = () => {
 	let remainingTasks = $('#incomplete-tasks li').length;
-	$('#counter').hide().fadeIn(3000).html(remainingTasks);
+	$('#counter').hide().fadeIn(300).html(remainingTasks);
 };
 
 

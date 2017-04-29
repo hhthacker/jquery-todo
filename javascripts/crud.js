@@ -30,5 +30,17 @@ var FbApi = ((oldCrap) => {
 		});
 	};
 
+	oldCrap.checker = (id) => {
+		return new Promise((resolve, reject) => {
+			FbApi.setChecked(id);
+			resolve();
+
+		});
+
+
+	};
+
+
+
 	return oldCrap;
 })(FbApi || {});
