@@ -1,4 +1,5 @@
 $(document).ready(function(){
+	let apiKeys;
 
 	$('#new-item').click(() => {
 		$('.list-container').addClass('hide');
@@ -12,14 +13,24 @@ $(document).ready(function(){
 
 	}); 
 
-//call things in crud: get todo
-	FbApi.getTodos().then(() => {
-		FbApi.writeDom();
+	FbApi.firebaseCredentials().then((keys) => {
+		apiKeys = keys;
+		firebase.initializeApp(apiKeys);
+		FbApi.writeDom(apiKeys);
 		countTask();
-		})
-	.catch((error) => {
-		console.log("getTodos Error", error);
+
+	}).catch((error) => {
+		console.log("key errors", error);
 	});
+
+//call things in crud: get todo
+	//  FbApi.getTodos().then(() => {
+	// 	FbApi.writeDom();
+	// 	countTask();
+	// 	})
+	// .catch((error) => {
+	// 	console.log("getTodos Error", error);
+	// });
 
 //add todo
 	$('#add-todo-button').click(() => {
@@ -73,23 +84,9 @@ $(document).ready(function(){
 		});
 	});
 
-
-
-
-
-
-
-
 let countTask = () => {
 	let remainingTasks = $('#incomplete-tasks li').length;
 	$('#counter').hide().fadeIn(300).html(remainingTasks);
 };
-
-
-
-
-
-
-
 
 });

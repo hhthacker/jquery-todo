@@ -1,19 +1,19 @@
 //augments
 var FbApi = ((oldCrap) => {
 
-	oldCrap.getTodos = () => {
+	oldCrap.getTodos = (apiKeys) => {
 		let items = [];
 		return new Promise ((resolve, reject) => {
-			$.ajax('./database/seed.json')
+			$.ajax(`${apiKeys.databaseURL}/items.json`)
 			.done((data) => {
-				let response = data.items;
+				let response = data;
 				Object.keys(response).forEach((key) => {
 					response[key].id = key;
 					//response[item0] = { is complete: true, task: mow the lawn
 					items.push(response[key]);
 				});
-				FbApi.setTodos(items);
-				resolve();
+				//FbApi.setTodos(items);
+				resolve(items);
 			})
 			.fail((error) => {
 				reject(error);
