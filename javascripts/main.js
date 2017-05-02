@@ -17,20 +17,11 @@ $(document).ready(function(){
 		apiKeys = keys;
 		firebase.initializeApp(apiKeys);
 		FbApi.writeDom(apiKeys);
-		countTask();
 
 	}).catch((error) => {
 		console.log("key errors", error);
 	});
 
-//call things in crud: get todo
-	//  FbApi.getTodos().then(() => {
-	// 	FbApi.writeDom();
-	// 	countTask();
-	// 	})
-	// .catch((error) => {
-	// 	console.log("getTodos Error", error);
-	// });
 
 //add todo
 	$('#add-todo-button').click(() => {
@@ -38,13 +29,11 @@ $(document).ready(function(){
 			isCompleted: false,
 			task: $('#add-todo-text').val()
 		};
-		console.log("newpotato", newTodo);
-		FbApi.addTodo(newTodo).then(() => {
+		FbApi.addTodo(apiKeys, newTodo).then(() => {
 			$('#add-todo-text').val("");
 			$('.list-container').removeClass('hide');
 			$('.new-container').addClass('hide');
 			FbApi.writeDom(apiKeys);
-			countTask();
 		 }).catch((error) => {
 		 	console.log("addTodo error", error);
 		});
@@ -54,7 +43,6 @@ $(document).ready(function(){
 	$('.main-container').on('click', '.delete', (event) => {
 		FbApi.deleteTodo(apiKeys, event.target.id).then(() => {
 			FbApi.writeDom(apiKeys);
-			countTask();
 		}).catch((error) => {
 			console.log("error in deleteTodo", error);
 		});
@@ -76,7 +64,6 @@ $(document).ready(function(){
 	$('.main-container').on("click", 'input[type="checkbox"]', (event) => {
 		FbApi.checker(event.target.id).then(() => {
 			FbApi.writeDom(apiKeys);
-			countTask();
 		}).catch((error) => {
 
 
@@ -84,9 +71,5 @@ $(document).ready(function(){
 		});
 	});
 
-let countTask = () => {
-	let remainingTasks = $('#incomplete-tasks li').length;
-	$('#counter').hide().fadeIn(300).html(remainingTasks);
-};
 
 });
