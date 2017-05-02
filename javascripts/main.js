@@ -43,7 +43,7 @@ $(document).ready(function(){
 			$('#add-todo-text').val("");
 			$('.list-container').removeClass('hide');
 			$('.new-container').addClass('hide');
-			FbApi.writeDom();
+			FbApi.writeDom(apiKeys);
 			countTask();
 		 }).catch((error) => {
 		 	console.log("addTodo error", error);
@@ -52,8 +52,8 @@ $(document).ready(function(){
 
 	//delete todo
 	$('.main-container').on('click', '.delete', (event) => {
-		FbApi.deleteTodo(event.target.id).then(() => {
-			FbApi.writeDom();
+		FbApi.deleteTodo(apiKeys, event.target.id).then(() => {
+			FbApi.writeDom(apiKeys);
 			countTask();
 		}).catch((error) => {
 			console.log("error in deleteTodo", error);
@@ -75,7 +75,7 @@ $(document).ready(function(){
 	//complete todos
 	$('.main-container').on("click", 'input[type="checkbox"]', (event) => {
 		FbApi.checker(event.target.id).then(() => {
-			FbApi.writeDom();
+			FbApi.writeDom(apiKeys);
 			countTask();
 		}).catch((error) => {
 
