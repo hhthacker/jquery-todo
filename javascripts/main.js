@@ -51,7 +51,14 @@ $(document).ready(function(){
 
 
 	//edit todo
-
+	$('.main-container').on('click', '.edit', (event) => {
+		let editText = $(event.target).closest('.col-xs-4').siblings('.col-xs-8').find('.task').html();
+		FbApi.editTodo(event.target.id).then(() => {
+			$('.list-container').addClass('hide');
+			$('.new-container').removeClass('hide');
+			$('#add-todo-text').val(editText);
+		}).catch((error) => console.log(error));
+	});
 
 
 	//complete todos
@@ -60,6 +67,8 @@ $(document).ready(function(){
 			FbApi.writeDom();
 			countTask();
 		}).catch((error) => {
+
+
 			console.log("checker error", error);
 		});
 	});
