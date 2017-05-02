@@ -1,27 +1,24 @@
 $(document).ready(function(){
 	let apiKeys;
+	let editId = "";
 
 	$('#new-item').click(() => {
 		$('.list-container').addClass('hide');
 		$('.new-container').removeClass('hide');
-
 	}); 
 
 	$('#list-items').click(() => {
 		$('.new-container').addClass('hide');
 		$('.list-container').removeClass('hide');
-
 	}); 
 
 	FbApi.firebaseCredentials().then((keys) => {
 		apiKeys = keys;
 		firebase.initializeApp(apiKeys);
 		FbApi.writeDom(apiKeys);
-
 	}).catch((error) => {
 		console.log("key errors", error);
 	});
-
 
 //add todo
 	$('#add-todo-button').click(() => {
@@ -29,6 +26,17 @@ $(document).ready(function(){
 			isCompleted: false,
 			task: $('#add-todo-text').val()
 		};
+		if (editId.length > 0) {
+			//edit
+		FbApi.editTodo(apiKeys, newTodo, editId).then(() => {
+			$('#add-todo-text').val("");
+			$('.list-container').removeClass('hide');
+			$('.new-container').addClass('hide');
+			FbApi.writeDom(apiKeys);
+		 }).catch((error) => {
+		 	console.log("addTodo error", error);
+		});
+		} else {
 		FbApi.addTodo(apiKeys, newTodo).then(() => {
 			$('#add-todo-text').val("");
 			$('.list-container').removeClass('hide');
@@ -37,6 +45,7 @@ $(document).ready(function(){
 		 }).catch((error) => {
 		 	console.log("addTodo error", error);
 		});
+		}
 	});
 
 	//delete todo
@@ -48,28 +57,24 @@ $(document).ready(function(){
 		});
 	});
 
-
 	//edit todo
 	$('.main-container').on('click', '.edit', (event) => {
 		let editText = $(event.target).closest('.col-xs-4').siblings('.col-xs-8').find('.task').html();
-		FbApi.editTodo(event.target.id).then(() => {
 			$('.list-container').addClass('hide');
 			$('.new-container').removeClass('hide');
 			$('#add-todo-text').val(editText);
-		}).catch((error) => console.log(error));
 	});
-
 
 	//complete todos
 	$('.main-container').on("click", 'input[type="checkbox"]', (event) => {
-		FbApi.checker(event.target.id).then(() => {
+		let myTodo = {
+			isCompleted: event.target.checked,
+			task: $(event.target).siblings('.task').html()
+		};
+		FbApi.editTodo(apiKeys, myTodo, event.target.id).then(() => {
 			FbApi.writeDom(apiKeys);
 		}).catch((error) => {
-
-
 			console.log("checker error", error);
 		});
 	});
-
-
 });

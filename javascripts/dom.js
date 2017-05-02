@@ -47,7 +47,5 @@ var FbApi = ((otherOldCrap) => {
         });
 	};
 
-
-
 	return otherOldCrap;
 })(FbApi || {});
