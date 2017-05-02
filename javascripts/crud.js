@@ -1,19 +1,19 @@
 //augments
 var FbApi = ((oldCrap) => {
 
-	oldCrap.getTodos = () => {
+	oldCrap.getTodos = (apiKeys) => {
 		let items = [];
 		return new Promise ((resolve, reject) => {
-			$.ajax('./database/seed.json')
+			$.ajax(`${apiKeys.databaseURL}/items.json`)
 			.done((data) => {
-				let response = data.items;
+				let response = data;
 				Object.keys(response).forEach((key) => {
 					response[key].id = key;
 					//response[item0] = { is complete: true, task: mow the lawn
 					items.push(response[key]);
 				});
-				FbApi.setTodos(items);
-				resolve();
+				//FbApi.setTodos(items);
+				resolve(items);
 			})
 			.fail((error) => {
 				reject(error);
@@ -21,37 +21,46 @@ var FbApi = ((oldCrap) => {
 		});
 	};
 
-	oldCrap.addTodo = (newTodo) => {
+	oldCrap.addTodo = (apiKeys, newTodo) => {
 		return new Promise ((resolve, reject) => {
-			newTodo.id = `item${FbApi.todoGetter().length}`;
-			console.log("mew mew", newTodo);
-			FbApi.setSingleTodo(newTodo);
-			resolve();
+			$.ajax({
+				method: 'POST',
+				url: `${apiKeys.databaseURL}/items.json`,
+				data: JSON.stringify(newTodo)
+			}).done(() => {
+				resolve();
+			}).fail((error) => {
+				reject(error);
+			});
 		});
 	};
 
-	oldCrap.checker = (id) => {
-		return new Promise((resolve, reject) => {
-			FbApi.setChecked(id);
-			resolve();
-
-		});
-	};
-
-	oldCrap.deleteTodo = (id) => {
+	oldCrap.deleteTodo = (apiKeys, id) => {
 		return new Promise ((resolve, reject) => {
-			FbApi.duhlete(id);
-			resolve();
+			$.ajax({
+				method: 'DELETE',
+				url: `${apiKeys.databaseURL}/items/${id}.json`
+			}).done(() => {
+				resolve();
+			}).fail((error) => {
+				reject(error);
+			});
 		});
 	};
 
-	oldCrap.editTodo = (id) => {
+	oldCrap.editTodo = (apiKeys, editTodo, id) => {
 		return new Promise ((resolve, reject) => {
-			FbApi.duhlete(id);
-			resolve();
+			$.ajax({
+				method: 'PUT',
+				url: `${apiKeys.databaseURL}/items/${id}.json`,
+				data: JSON.stringify(editTodo)
+			}).done(() => {
+				resolve();
+			}).fail((error) => {
+				reject(error);
+			});
 		});
 	};
-
 
 	return oldCrap;
 })(FbApi || {});

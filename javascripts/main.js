@@ -1,24 +1,23 @@
 $(document).ready(function(){
+	let apiKeys;
+	let editId = "";
 
 	$('#new-item').click(() => {
 		$('.list-container').addClass('hide');
 		$('.new-container').removeClass('hide');
-
 	}); 
 
 	$('#list-items').click(() => {
 		$('.new-container').addClass('hide');
 		$('.list-container').removeClass('hide');
-
 	}); 
 
-//call things in crud: get todo
-	FbApi.getTodos().then(() => {
-		FbApi.writeDom();
-		countTask();
-		})
-	.catch((error) => {
-		console.log("getTodos Error", error);
+	FbApi.firebaseCredentials().then((keys) => {
+		apiKeys = keys;
+		firebase.initializeApp(apiKeys);
+		FbApi.writeDom(apiKeys);
+	}).catch((error) => {
+		console.log("key errors", error);
 	});
 
 //add todo
@@ -27,69 +26,55 @@ $(document).ready(function(){
 			isCompleted: false,
 			task: $('#add-todo-text').val()
 		};
-		console.log("newpotato", newTodo);
-		FbApi.addTodo(newTodo).then(() => {
+		if (editId.length > 0) {
+			//edit
+		FbApi.editTodo(apiKeys, newTodo, editId).then(() => {
 			$('#add-todo-text').val("");
 			$('.list-container').removeClass('hide');
 			$('.new-container').addClass('hide');
-			FbApi.writeDom();
-			countTask();
+			FbApi.writeDom(apiKeys);
 		 }).catch((error) => {
 		 	console.log("addTodo error", error);
 		});
+		} else {
+		FbApi.addTodo(apiKeys, newTodo).then(() => {
+			$('#add-todo-text').val("");
+			$('.list-container').removeClass('hide');
+			$('.new-container').addClass('hide');
+			FbApi.writeDom(apiKeys);
+		 }).catch((error) => {
+		 	console.log("addTodo error", error);
+		});
+		}
 	});
 
 	//delete todo
 	$('.main-container').on('click', '.delete', (event) => {
-		FbApi.deleteTodo(event.target.id).then(() => {
-			FbApi.writeDom();
-			countTask();
+		FbApi.deleteTodo(apiKeys, event.target.id).then(() => {
+			FbApi.writeDom(apiKeys);
 		}).catch((error) => {
 			console.log("error in deleteTodo", error);
 		});
 	});
 
-
 	//edit todo
 	$('.main-container').on('click', '.edit', (event) => {
 		let editText = $(event.target).closest('.col-xs-4').siblings('.col-xs-8').find('.task').html();
-		FbApi.editTodo(event.target.id).then(() => {
 			$('.list-container').addClass('hide');
 			$('.new-container').removeClass('hide');
 			$('#add-todo-text').val(editText);
-		}).catch((error) => console.log(error));
 	});
-
 
 	//complete todos
 	$('.main-container').on("click", 'input[type="checkbox"]', (event) => {
-		FbApi.checker(event.target.id).then(() => {
-			FbApi.writeDom();
-			countTask();
+		let myTodo = {
+			isCompleted: event.target.checked,
+			task: $(event.target).siblings('.task').html()
+		};
+		FbApi.editTodo(apiKeys, myTodo, event.target.id).then(() => {
+			FbApi.writeDom(apiKeys);
 		}).catch((error) => {
-
-
 			console.log("checker error", error);
 		});
 	});
-
-
-
-
-
-
-
-
-let countTask = () => {
-	let remainingTasks = $('#incomplete-tasks li').length;
-	$('#counter').hide().fadeIn(300).html(remainingTasks);
-};
-
-
-
-
-
-
-
-
 });
