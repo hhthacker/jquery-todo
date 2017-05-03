@@ -77,4 +77,27 @@ $(document).ready(function(){
 			console.log("checker error", error);
 		});
 	});
+
+	$('#registerButton').click(() => {
+		let email = $('#inputEmail').val();
+		let password = $('#inputPassword').val();
+		let username = $('#inputUsername').val();
+
+		let user = {email, password}; //es6 notation for object when key/value are same
+		FbApi.registerUser(user).then((response) => {
+			console.log("register response", response);
+		}).catch((error) => {
+			console.log("error in registerUser", error);
+		});
+	});
+
+
+
+
+
+
+
+
+
+
 });
