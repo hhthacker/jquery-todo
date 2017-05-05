@@ -2,15 +2,20 @@
     "items": {
         "item0": {
             "isCompleted": true,
-            "task": "mow the lawn"
+            "task": "mow the lawn",
+            "uid": "r5jlc4ZzJjWfbDatG8NqYFIVV3p2"
         },
         "item1": {
             "isCompleted": false,
-            "task": "eat chips"
+            "task": "eat chips",
+            "uid": "vEgHuy8NgpP8jN2XEpajImilWxC3"
+
         },
         "item2": {
             "isCompleted": false,
-            "task": "take a nap"
+            "task": "take a nap",
+            "uid": "vEgHuy8NgpP8jN2XEpajImilWxC3"
+
         }
     },
     "users": {
