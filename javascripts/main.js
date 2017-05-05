@@ -60,7 +60,7 @@ $(document).ready(function(){
 //edit todo
 	$('.main-container').on('click', '.edit', (event) => {
 		let editText = $(event.target).closest('.col-xs-4').siblings('.col-xs-8').find('.task').html();
-			editIt = event.target.id;
+			editId = event.target.id;
 			$('.list-container').addClass('hide');
 			$('.new-container').removeClass('hide');
 			$('#add-todo-text').val(editText);
