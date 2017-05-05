@@ -50,12 +50,12 @@ var FbApi = ((oldCrap) => {
 		});
 	};
 
-	oldCrap.editTodo = (apiKeys, editTodo, id) => {
+	oldCrap.editTodo = (apiKeys, editTodo, itemId) => {
 		editTodo.uid = FbApi.credentialsCurrentUser().uid;
 		return new Promise ((resolve, reject) => {
 			$.ajax({
 				method: 'PUT',
-				url: `${apiKeys.databaseURL}/items/${id}.json`,
+				url: `${apiKeys.databaseURL}/items/${itemId}.json`,
 				data: JSON.stringify(editTodo)
 			}).done(() => {
 				resolve();
