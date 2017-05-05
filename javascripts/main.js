@@ -26,9 +26,10 @@ $(document).ready(function(){
 			task: $('#add-todo-text').val()
 		};
 		if (editId.length > 0) {
-			//edit
+//edit
 		FbApi.editTodo(apiKeys, newTodo, editId).then(() => {
 			$('#add-todo-text').val("");
+			editId = "";
 			$('.list-container').removeClass('hide');
 			$('.new-container').addClass('hide');
 			FbApi.writeDom(apiKeys);
@@ -47,7 +48,7 @@ $(document).ready(function(){
 		}
 	});
 
-	//delete todo
+//delete todo
 	$('.main-container').on('click', '.delete', (event) => {
 		FbApi.deleteTodo(apiKeys, event.target.id).then(() => {
 			FbApi.writeDom(apiKeys);
@@ -56,15 +57,16 @@ $(document).ready(function(){
 		});
 	});
 
-	//edit todo
+//edit todo
 	$('.main-container').on('click', '.edit', (event) => {
 		let editText = $(event.target).closest('.col-xs-4').siblings('.col-xs-8').find('.task').html();
+			editIt = event.target.id;
 			$('.list-container').addClass('hide');
 			$('.new-container').removeClass('hide');
 			$('#add-todo-text').val(editText);
 	});
 
-	//complete todos
+//complete todos
 	$('.main-container').on("click", 'input[type="checkbox"]', (event) => {
 		let myTodo = {
 			isCompleted: event.target.checked,
